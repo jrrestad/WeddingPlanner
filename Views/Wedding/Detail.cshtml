@@ -1,0 +1,15 @@
+@model Wedding
+
+<div class="container">
+    <h1>
+    @Model.WedderOne and @Model.WedderTwo's Wedding
+    </h1>
+    <h2>@Model.Date</h2>
+    <h2>Guests:</h2>
+    @foreach (var guest in Model.Guests)
+    {
+    <h2>
+        <ul>@guest.UsersAttending.FirstName @guest.UsersAttending.LastName</ul>
+    </h2>
+    }
+</div>

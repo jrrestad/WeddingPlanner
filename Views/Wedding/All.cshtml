@@ -1,0 +1,62 @@
+@model List<Wedding>
+
+@{
+    int? uid = @Context.Session.GetInt32("UserId");
+}
+
+<div class="container">
+    <h1>Welcome to the Wedding Planner 2.0</h1>
+    <table class="table">
+        <tr>
+            <th scope="1">Wedding</th>
+            <th scope="2">Date</th>
+            <th scope="3">Guests</th>
+            <th scope="4">Action</th>
+        </tr>
+        @foreach (Wedding wedding in Model)
+        {
+        <tr>
+            <th>
+                <a asp-controller="Wedding"
+                asp-action="Detail"
+                asp-route-weddingId="@wedding.WeddingId"
+                >
+                @wedding.WedderOne & @wedding.WedderTwo
+                </a>
+            </th>
+            <th>@wedding.Date.ToString("MM/dd/yyy")</th>
+            <th>@wedding.Guests.Count</th>
+            <th>
+                @if (wedding.Creator.UserId == uid)
+                {
+                <a asp-controller="Wedding"
+                asp-action="Delete"
+                asp-route-weddingId="@wedding.WeddingId"
+                >
+                Delete
+                </a>
+                }
+                else if (wedding.Guests.Any(wed => wed.UsersAttending.UserId == uid))
+                {
+                <a asp-controller="Wedding"
+                asp-action="UNRSVP"
+                asp-route-weddingId="@wedding.WeddingId"
+                >
+                UNRSVP
+                </a>
+                }
+                else
+                {
+                <a asp-controller="Wedding"
+                asp-action="RSVP"
+                asp-route-weddingId="@wedding.WeddingId"
+                >
+                RSVP
+                </a>
+                }
+            </th>
+        </tr>
+        }
+    </table>
+    <a class="btn btn-primary" href="/weddings/new">New Wedding</a>
+</div>
